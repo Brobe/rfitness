@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RFitness</string>
+    <string name="gvt_title">GVT program with powerlifting</string>
+    <string name="gvt_description">
+                German Volume Training (GVT) is a high-volume resistance training method designed to build significant muscle mass and improve work capacity. The core principle of GVT is performing ten sets of ten repetitions for a major compound lift, using a challenging but manageable weight. This structure creates a strong hypertrophy stimulus through high time under tension and repeated muscular fatigue.
+
+                One of the main advantages of GVT is its simplicity. Workouts focus on a limited number of exercises, allowing athletes to concentrate on proper technique, controlled tempo, and consistent progression. The high training volume forces the body to adapt by increasing muscle size and endurance, making GVT especially effective for individuals who have plateaued with traditional training routines.
+
+                GVT also improves mental toughness and discipline. Completing ten sets of ten requires focus and commitment, helping athletes develop resilience under fatigue. When paired with adequate recovery, nutrition, and sleep, GVT can lead to rapid gains in lean mass.
+
+                This program integrates powerlifting principles to maintain strength in compound movements while still emphasizing hypertrophy. By balancing heavy lifts with structured volume, the program supports long-term progress without sacrificing performance. German Volume Training is best suited for intermediate lifters who are prepared to train intensely and recover properly between sessions.
+    </string>
+</resources>
