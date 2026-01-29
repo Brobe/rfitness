@@ -29,11 +29,15 @@ class ExerciseViewBinder(
 
             val initialWeight = baseWeight ?: 0.0
 
-            setText.text = formatSet(index, reps, initialWeight)
+            setText.text = formatSet(index, reps)
             weightInput.setText("%.1f".format(initialWeight))
 
             if (exercise is Exercise.PowerExercise) {
-                weightInput.isEnabled = false
+                weightInput.apply { 
+                    isFocusable = false
+                    isFocusableInTouchMode = false
+                    isClickable = false
+                }
             } else {
                 weightInput.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(
@@ -54,7 +58,7 @@ class ExerciseViewBinder(
                         val newWeight = s?.toString()?.toDoubleOrNull() ?: return
 
                         // Update current set text
-                        setText.text = formatSet(index, reps, newWeight)
+                        setText.text = formatSet(index, reps)
 
                         // Propagate to following sets
                         for (i in index + 1 until setsContainer.childCount) {
@@ -62,7 +66,7 @@ class ExerciseViewBinder(
                             val nextText = nextSet.findViewById<TextView>(R.id.setText)
                             val nextInput = nextSet.findViewById<EditText>(R.id.setWeightInput)
 
-                            nextText.text = formatSet(i, exercise.repsPerSet[i], newWeight)
+                            nextText.text = formatSet(i, exercise.repsPerSet[i])
 
                             if (nextInput.text.toString() != "%.1f".format(newWeight)) {
                                 nextInput.setText("%.1f".format(newWeight))
@@ -79,8 +83,7 @@ class ExerciseViewBinder(
         return ExerciseViewState(view)
     }
 
-    private fun formatSet(index: Int, reps: Int, weight: Double?): String {
-        val w = weight?.let {"%.1f".format(it) } ?: "?"
-        return "Set ${index + 1}: $reps reps -> $w kg"
+    private fun formatSet(index: Int, reps: Int): String {
+        return "Set ${index + 1}: $reps reps ->"
     }
 }

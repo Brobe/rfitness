@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".GvtActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".WorkoutHistoryActivity" />
         <activity android:name=".GvtWorkoutActivity" />
     </application>
 

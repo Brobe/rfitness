@@ -17,7 +17,7 @@
         android:id="@+id/setText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set1: 12 reps -> 100 kg"
+        android:text="Set1: 12 reps ->"
         android:textSize="16sp"
         android:layout_marginEnd="8dp"
         />

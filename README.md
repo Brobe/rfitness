@@ -5,9 +5,18 @@ Developing an app for android that will have different training programs. It wil
 Does not work correctly yet!
 
 ### Working on
-- [ ] Read exercises from db/file/xml (how does storing data work in android?)
-- [ ] Save workout to said db/file/xml
+- [ ] Power Exercises
+- [ ] Normal Exercises
+- [ ] Read exercises from Room
+- [ ] Save workout to Room
 - [ ] Previous exercise weight
-- [ ] Change how many reps where done for each set
+- [ ] Change how many reps where done for each set (Buttons or other solution?)
 - [ ] Notes for each exercise (maybe)
+- [ ] Remove topWeight
+- [ ] write the workout program to a Room(?) file
+- [ ] Choose which workout to start
+- [ ] Display workout in settings
+- [ ] Round weight for powerexercises to 0.0 -> 2.5 -> 5.0 -> 7.5 -> 10.0 -> ...
+- [ ] Progression graph
+- [ ] Refactor to RecyclerView
 - [ ] Probably more

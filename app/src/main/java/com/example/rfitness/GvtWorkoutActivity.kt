@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import kotlin.collections.listOf
+import kotlinx.coroutines.launch
 
 class GvtWorkoutActivity : AppCompatActivity() {
 
@@ -14,6 +16,8 @@ class GvtWorkoutActivity : AppCompatActivity() {
         super.onCreate(savedInstaceState)
         setContentView(R.layout.gvt_workout)
 
+        val db = DatabaseProvider.getDatabase(this)
+        val repository = WorkoutRepository(db.workoutDao())
 
         val workoutTitle = findViewById<TextView>(R.id.workoutTitle)
         val container = findViewById<LinearLayout>(R.id.workoutContainer)
@@ -32,11 +36,44 @@ class GvtWorkoutActivity : AppCompatActivity() {
 
 
         doneButton?.setOnClickListener {
-            if (exerciseViews.all { it.isCompleted() }) {
-                // Success (later: save workout)
-                Toast.makeText(this, "Workout completed!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Finish all sets or skip exercises", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+            
+
+                val workoutSession = WorkoutSessionEntity(
+                    workoutName = workoutTitle.text.toString(),
+                    date = System.currentTimeMillis()
+                )
+
+                val exerciseResults = mutableListOf<ExerciseResultEntity>()
+                val setResults = mutableListOf<SetResultEntity>()
+
+                exerciseViews.forEachIndexed { index, state ->
+                    val exercise = workout.exercises[index]
+
+                    val (exerciseResult, sets) = 
+                        state.toExerciseResult(
+                            workoutSessionId = 0,
+                            exerciseName = exercise.name,
+                            exerciseIndex = index
+                        )
+
+                    exerciseResults.add(exerciseResult)
+                    setResults.addAll(sets)
+                }
+
+                repository.saveWorkout(
+                    workoutSession,
+                    exerciseResults,
+                    setResults
+                )
+
+                Toast.makeText(
+                    this@GvtWorkoutActivity,
+                    "Workout saved!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                finish()
             }
         }
     }
