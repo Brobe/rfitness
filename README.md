@@ -8,15 +8,17 @@ Does not work correctly yet!
 - [ ] Power Exercises
 - [ ] Normal Exercises
 - [ ] Read exercises from Room
-- [ ] Save workout to Room
+- [x] Save workout to Room
 - [ ] Previous exercise weight
 - [ ] Change how many reps where done for each set (Buttons or other solution?)
 - [ ] Notes for each exercise (maybe)
 - [ ] Remove topWeight
-- [ ] write the workout program to a Room(?) file
+- [ ] Write the workout program to a Room(?) file
 - [ ] Choose which workout to start
-- [ ] Display workout in settings
+- [x] Display workout in settings
+- [ ] Add clear all data in settings
 - [ ] Round weight for powerexercises to 0.0 -> 2.5 -> 5.0 -> 7.5 -> 10.0 -> ...
 - [ ] Progression graph
 - [ ] Refactor to RecyclerView
+    - [x] Workout history
 - [ ] Probably more
