@@ -38,4 +38,14 @@
         android:layout_marginStart="4dp"
         />
 
+    <TextView
+        android:id="@+id/previousWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:layout_marginStart="4dp"
+        android:textStyle="italic"
+        />
+
 </LinearLayout>

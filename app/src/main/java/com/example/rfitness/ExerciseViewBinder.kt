@@ -26,6 +26,7 @@ class ExerciseViewBinder(
             val setView = inflater.inflate(R.layout.view_set_row, setsContainer, false)
             val setText = setView.findViewById<TextView>(R.id.setText)
             val weightInput = setView.findViewById<EditText>(R.id.setWeightInput)
+            val previousWeight = setView.findViewById<TextView>(R.id.previousWeight)
 
             val initialWeight = baseWeight ?: 0.0
 
@@ -39,6 +40,11 @@ class ExerciseViewBinder(
                     isClickable = false
                 }
             } else {
+                if (exercise is Exercise.GvtExercise && exercise.previousWeight != null && index < exercise.previousWeight.size) {
+                    previousWeight.text = "(prev. %.1f)".format(exercise.previousWeight[index])
+                } else {
+                    previousWeight.text = "(prev. --)"
+                }
                 weightInput.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(
                         s: CharSequence?,
@@ -65,12 +71,14 @@ class ExerciseViewBinder(
                             val nextSet = setsContainer.getChildAt(i)
                             val nextText = nextSet.findViewById<TextView>(R.id.setText)
                             val nextInput = nextSet.findViewById<EditText>(R.id.setWeightInput)
+                            val nextPreviousWeight = nextSet.findViewById<TextView>(R.id.previousWeight)
 
                             nextText.text = formatSet(i, exercise.repsPerSet[i])
 
                             if (nextInput.text.toString() != "%.1f".format(newWeight)) {
                                 nextInput.setText("%.1f".format(newWeight))
                             }
+                            
                         }
                     }
                 })

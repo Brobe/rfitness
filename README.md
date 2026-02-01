@@ -9,7 +9,9 @@ Does not work correctly yet!
 - [ ] Normal Exercises
 - [ ] Read exercises from Room
 - [x] Save workout to Room
-- [ ] Previous exercise weight
+- [x] Previous exercise weight
+    - [ ] Checkboxes does not work as intended atm
+    - [ ] Check if previous weight was skipped. Then different output should be written.
 - [ ] Change how many reps where done for each set (Buttons or other solution?)
 - [ ] Notes for each exercise (maybe)
 - [ ] Remove topWeight

@@ -22,7 +22,7 @@ sealed class Exercise {
         override val name: String,
         override val repsPerSet: List<Int>,
         override val weight: Double? = null,
-        val previousWeight: Double? = null,
+        val previousWeight: List<Double>? = null,
         val previousRepsPerSet: List<Int>? = null
     ) : Exercise()
 

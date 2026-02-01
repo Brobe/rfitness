@@ -12,8 +12,19 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout_session ORDER BY date DESC")
     suspend fun getFullWorkouts(): List<WorkoutWithExercises>
 
-    @Query("SELECT * FROM workout_session ORDER BY date DESC")
-    suspend fun getAllWorkouts(): List<WorkoutSessionEntity>
+    @Query("""
+        SELECT sr.weight
+        FROM set_results sr
+        WHERE sr.exerciseResultId = (
+            SELECT er.id
+            FROM exercise_results er
+            WHERE er.exerciseName = :exerciseName
+            ORDER BY er.id DESC
+            LIMIT 1
+        )
+        ORDER BY sr.setIndex ASC
+    """)
+    suspend fun getPreviousWeightForExercise(exerciseName: String): List<Double>
 
     @Insert
     suspend fun insertWorkout(workout: WorkoutSessionEntity): Long

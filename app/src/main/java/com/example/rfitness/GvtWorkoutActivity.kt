@@ -3,14 +3,13 @@ package com.example.rfitness
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import kotlin.collections.listOf
 import kotlinx.coroutines.launch
 
 class GvtWorkoutActivity : AppCompatActivity() {
 
     private val exerciseViews = mutableListOf<ExerciseViewState>()
+    private lateinit var workout: Workout
     
     override fun onCreate(savedInstaceState: Bundle?) {
         super.onCreate(savedInstaceState)
@@ -22,25 +21,22 @@ class GvtWorkoutActivity : AppCompatActivity() {
         val workoutTitle = findViewById<TextView>(R.id.workoutTitle)
         val container = findViewById<LinearLayout>(R.id.workoutContainer)
         val doneButton = findViewById<Button>(R.id.doneButton)
-
-        val workout = createTodayWorkout()
-
-        workoutTitle.text = workout.title
-
         val binder = ExerciseViewBinder(layoutInflater)
 
-        workout.exercises.forEach { exercise ->
-            val state = binder.bind(container, exercise)
-            exerciseViews.add(state)
-        }
+        lifecycleScope.launch {
+            workout = createTodayWorkout(repository)
+            workoutTitle.text = workout.title
 
+            workout.exercises.forEach { exercise ->
+                val state = binder.bind(container, exercise)
+                exerciseViews.add(state)
+            }
+        }
 
         doneButton?.setOnClickListener {
             lifecycleScope.launch {
-            
-
                 val workoutSession = WorkoutSessionEntity(
-                    workoutName = workoutTitle.text.toString(),
+                    workoutName = workout.title,
                     date = System.currentTimeMillis()
                 )
 
@@ -78,9 +74,20 @@ class GvtWorkoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun createTodayWorkout(): Workout {
+    private suspend fun createTodayWorkout(repository: WorkoutRepository): Workout {
         val gvtworkout = GvtWorkoutViewModel()
-        return gvtworkout.workout
+        val original = gvtworkout.workout
+
+        val updatedExercises = original.exercises.map { exercise ->
+            when (exercise) {
+                is Exercise.GvtExercise -> {
+                    val previousWeight = repository.getPreviousWeightForExercise(exercise.name)
+                    exercise.copy(previousWeight = previousWeight)
+                }
+                else -> exercise
+            }
+        }
+        return original.copy(exercises = updatedExercises)
     }
 
 }

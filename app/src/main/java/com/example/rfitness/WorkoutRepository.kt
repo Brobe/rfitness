@@ -20,7 +20,8 @@ class WorkoutRepository(
         return workoutDao.getFullWorkouts()
     }
 
-    suspend fun getAllWorkouts(): List<WorkoutSessionEntity> {
-        return workoutDao.getAllWorkouts()
+    suspend fun getPreviousWeightForExercise(name: String): List<Double>? {
+        val weights = workoutDao.getPreviousWeightForExercise(name)
+        return weights.ifEmpty { null }
     }
 }
