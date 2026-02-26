@@ -51,7 +51,7 @@ class ExerciseViewState(
 
             //Change when reps can be set with EditText or should it just be the same and use buttons?
             // can also be changed to a seperate TextView?
-            val reps = Regex("(\\d+) reps").find(text)?.groupValues?.get(1)?.toInt() ?: 0
+            val reps = setView.getTag(R.id.tag_reps) as Int
             val weight = weightInput.text.toString().toDoubleOrNull() ?: 0.0
 
             setResults.add(

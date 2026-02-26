@@ -35,6 +35,16 @@ class GvtWorkoutActivity : AppCompatActivity() {
 
         doneButton?.setOnClickListener {
             lifecycleScope.launch {
+                val allCompleted = exerciseViews.all { it.isCompleted() }
+
+                if (!allCompleted) {
+                    Toast.makeText(
+                        this@GvtWorkoutActivity,
+                        "Complete or skip all exercises.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
                 val workoutSession = WorkoutSessionEntity(
                     workoutName = workout.title,
                     date = System.currentTimeMillis()

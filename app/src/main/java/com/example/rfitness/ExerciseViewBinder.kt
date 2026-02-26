@@ -2,10 +2,12 @@ package com.example.rfitness
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Button
 
 
 class ExerciseViewBinder(
@@ -27,8 +29,13 @@ class ExerciseViewBinder(
             val setText = setView.findViewById<TextView>(R.id.setText)
             val weightInput = setView.findViewById<EditText>(R.id.setWeightInput)
             val previousWeight = setView.findViewById<TextView>(R.id.previousWeight)
+            val addRepButton = setView.findViewById<Button>(R.id.addRep)
+            val removeRepButton = setView.findViewById<Button>(R.id.removeRep)
 
             val initialWeight = baseWeight ?: 0.0
+            val initialReps = reps
+
+            setView.setTag(R.id.tag_reps, initialReps)
 
             setText.text = formatSet(index, reps)
             weightInput.setText("%.1f".format(initialWeight))
@@ -41,9 +48,9 @@ class ExerciseViewBinder(
                 }
             } else {
                 if (exercise is Exercise.GvtExercise && exercise.previousWeight != null && index < exercise.previousWeight.size) {
-                    previousWeight.text = "(prev. %.1f)".format(exercise.previousWeight[index])
+                    previousWeight.text = "Previously: %.1f".format(exercise.previousWeight[index])
                 } else {
-                    previousWeight.text = "(prev. --)"
+                    previousWeight.text = "Previously: --"
                 }
                 weightInput.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(
@@ -62,7 +69,6 @@ class ExerciseViewBinder(
 
                     override fun afterTextChanged(s: Editable?) {
                         val newWeight = s?.toString()?.toDoubleOrNull() ?: return
-
                         // Update current set text
                         setText.text = formatSet(index, reps)
 
@@ -71,18 +77,32 @@ class ExerciseViewBinder(
                             val nextSet = setsContainer.getChildAt(i)
                             val nextText = nextSet.findViewById<TextView>(R.id.setText)
                             val nextInput = nextSet.findViewById<EditText>(R.id.setWeightInput)
-                            val nextPreviousWeight = nextSet.findViewById<TextView>(R.id.previousWeight)
 
                             nextText.text = formatSet(i, exercise.repsPerSet[i])
-
                             if (nextInput.text.toString() != "%.1f".format(newWeight)) {
                                 nextInput.setText("%.1f".format(newWeight))
                             }
-                            
                         }
                     }
                 })
             }
+
+            addRepButton.setOnClickListener() {
+                val currentReps = setView.getTag(R.id.tag_reps) as Int
+                val newReps = currentReps + 1
+
+                setView.setTag(R.id.tag_reps, newReps)
+                updateSetText(setView, index)
+            }
+            removeRepButton.setOnClickListener() {
+                val currentReps = setView.getTag(R.id.tag_reps) as Int
+                val newReps = currentReps - 1
+                if ( newReps >= 0 ) {
+                    setView.setTag(R.id.tag_reps, newReps)
+                    updateSetText(setView, index)
+                }
+            }
+
 
             setsContainer.addView(setView)
         }
@@ -93,5 +113,11 @@ class ExerciseViewBinder(
 
     private fun formatSet(index: Int, reps: Int): String {
         return "Set ${index + 1}: $reps reps ->"
+    }
+
+    private fun updateSetText(setView: View, index: Int) {
+        val reps = setView.getTag(R.id.tag_reps) as Int
+        val setText = setView.findViewById<TextView>(R.id.setText)
+        setText.text = formatSet(index, reps)
     }
 }
